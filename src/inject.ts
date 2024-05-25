@@ -157,10 +157,13 @@ const run = async () => {
       const repo = window.location.href.split("/")[4]
 
       primaryLinks.forEach(linkElement => {
-        const file = linkElement.innerText
-          .split("→") // when file was renamed
-          .pop()
-          ?.trim()
+        const fileWasRenamed = linkElement.innerText.includes("→")
+        const fromCopyElement: string | undefined | null = linkElement.parentNode
+          ?.querySelector("clipboard-copy")
+          ?.getAttribute("value")
+        const fromInnerText: string | undefined = linkElement.innerText.split("→").pop()?.trim()
+
+        const file = fileWasRenamed ? fromInnerText : fromCopyElement ?? fromInnerText
 
         // no file found
         if (!file) return
